@@ -3,36 +3,33 @@ from typing import Set, Iterable, Any
 from tcod.context import Context
 from tcod.console import Console
 
-from Actions import EscapeAction, MovementAction
 from Entity import Entity
+from Game_Map import GameMap
 from Input_handlers import EventHandler
 
+
 class Engine:
-   #takes a set of entities that is kind of like a list of unique values
-   def __init__(self, entities: Set[Entity], event_handler: EventHandler, player: Entity):
-      self.entities = entities
-      self.event_handler = event_handler
-      self.player = player
+    def __init__(self, entities: Set[Entity], event_handler: EventHandler, Game_Map: GameMap, player: Entity):
+        self.entities = entities
+        self.event_handler = event_handler
+        self.game_map = Game_Map
+        self.player = player
 
-   #handles the events 
-   def handle_events(self, events: Iterable[Any]) -> None:
-      for event in events:
-         action = self.event_handler.dispatch(event)
+    def handle_events(self, events: Iterable[Any]) -> None:
+        for event in events:
+            action = self.event_handler.dispatch(event)
 
-         if action is None:
-            continue
-      
-         if isinstance(action, MovementAction):
-            self.player.move(dx = action.dx, dy = action.dy)
+            if action is None:
+                continue
 
-         elif isinstance(action, EscapeAction):
-            raise SystemExit()
+            action.perform(self, self.player)
 
-   #draws the screen
-   def render(self, console: Console, context: Context) -> None:
-      for entity in self.entities:
-         console.print(entity.x, entity.y, entity.char, fg = entity.color)
+    def render(self, console: Console, context: Context) -> None:
+        self.game_map.render(console)
 
-      context.present(console)
+        for entity in self.entities:
+            console.print(entity.x, entity.y, entity.char, fg=entity.color)
 
-      console.clear()
+        context.present(console)
+
+        console.clear()

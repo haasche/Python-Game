@@ -3,11 +3,15 @@ import tcod
 
 from Engine import Engine
 from Input_handlers import EventHandler
+from Game_Map import GameMap
 from Entity import Entity
 
 def main():
    screen_width = 80
    screen_height = 50
+
+   map_width = 80
+   map_height = 45
 
    #loads the font used for the game
    tileset = tcod.tileset.load_tilesheet(
@@ -22,8 +26,11 @@ def main():
    npc = Entity(int(screen_width / 2 - 5), int(screen_height / 2), "@", (255,255,0))
    entities = {npc, player}
 
+   Game_Map = GameMap (map_width, map_height)
+
    #now running graphics through engine
-   engine = Engine(entities = entities, event_handler = event_handler, player = player)
+   engine = Engine(entities=entities, event_handler=event_handler, Game_Map=Game_Map, player=player)
+
 
    with tcod.context.new_terminal(
       screen_width,
