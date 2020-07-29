@@ -7,8 +7,8 @@ class GameMap:
    # initalizer takes width/height and assigns them
    def __init__(self, width: int, height: int):
       self.width, self.height = width, height
-      self.tiles = np.full((width, height), fill_value = Tile_Types.floor, order = "F")
-      self.tiles[30:33, 22] = Tile_Types.wall # hard coded wall for testing purposes
+      self.tiles = np.full((width, height), fill_value = Tile_Types.wall, order = "F")
+      #self.tiles[30:33, 22] = Tile_Types.wall # hard coded wall for testing purposes
 
    # Returns True if player is in bound
    def in_bounds (self, x:int, y:int) -> bool:

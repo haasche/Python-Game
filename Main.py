@@ -3,8 +3,8 @@ import tcod
 
 from Engine import Engine
 from Input_handlers import EventHandler
-from Game_Map import GameMap
 from Entity import Entity
+from Procgen import generate_dungeon
 
 def main():
    screen_width = 80
@@ -12,6 +12,10 @@ def main():
 
    map_width = 80
    map_height = 45
+
+   room_max_size = 10
+   room_min_size = 6
+   max_rooms = 30
 
    #loads the font used for the game
    tileset = tcod.tileset.load_tilesheet(
@@ -26,7 +30,14 @@ def main():
    npc = Entity(int(screen_width / 2 - 5), int(screen_height / 2), "@", (255,255,0))
    entities = {npc, player}
 
-   Game_Map = GameMap (map_width, map_height)
+   #Game_Map = generate_dungeon(map_width, map_height)
+   Game_Map = generate_dungeon(max_rooms=max_rooms,
+                               room_min_size=room_min_size,
+                              room_max_size=room_max_size,
+                              map_width=map_width,
+                              map_height=map_height,
+                              player=player
+                              )
 
    #now running graphics through engine
    engine = Engine(entities=entities, event_handler=event_handler, Game_Map=Game_Map, player=player)
@@ -36,7 +47,7 @@ def main():
       screen_width,
       screen_height,
       tileset = tileset,
-      title="Gamiest Game Ever",
+      title="Python Tutorial Project",
       vsync = True,
    ) as context:
       root_console = tcod.Console(screen_width, screen_height, order="F")
